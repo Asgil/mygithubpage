@@ -279,11 +279,12 @@ footer hr {
 }
 
 .spotlight img {
-  width: 100%;
+  width: 120%;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+  margin-left: 0px;
+  margin-right: 10px;
+  text-align: left;
+  
 }
 
 .spotlight h1 {
