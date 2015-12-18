@@ -43,7 +43,7 @@ hr {
 
 header {
   background-color: #999;
-  background-image: url(img/toppic.jpg);
+  background-image: url(img/top_vert.png);
   background-repeat: no-repeat;
   background-position: center center;
   -webkit-background-size: cover;
@@ -279,7 +279,7 @@ footer hr {
 }
 
 .spotlight img {
-  width: 120%;
+  width: 100%;
   max-width: 600px;
   margin-left: 0px;
   margin-right: 10px;
