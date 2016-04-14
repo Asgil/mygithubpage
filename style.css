@@ -52,7 +52,7 @@ header {
   background-size: cover;
   margin-bottom: 4em;
   text-align: center;
-  height: 500px;
+  height: 200px;
  
 }
 
@@ -289,10 +289,17 @@ footer hr {
 
 .spotlight h1 {
   color: #00aced;
+  font-size: 2.1em;
 }
 
 .spotlight h2 {
   color: #FF8000;
+  font-size: 2.1em;
+}
+
+.spotlight h3 {
+  color: #7ABAF9;
+  font-size: 2.1em;
 }
 
 .spotlight p {
@@ -340,6 +347,20 @@ footer hr {
   margin-top: 20px;
   margin-bottom: 10px;
 }
+
+.link.pr3 {
+  background-color: transparent;
+  border: 3px solid #7ABAF9;
+  padding: 7px 35px;
+  border-radius: 3px;
+  color: #7ABAF9;
+  font-size: 1.1em;
+  opacity: .8;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
 
 @media screen and (min-width: 40em) {
   .spotlight {
