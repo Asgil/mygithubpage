@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Anastasia Kuznetsova</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ 
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-73313437-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</head>
+
+<body>
+	
+	<!-- Header-->
+	<header>
+		<!--<img src="img/top.png" width="500" top="20" wspace="200" alt="">-->
+
+		<h1>Social Network Analysis</h1>
+		<p>How to combine python and R to analyze data from Social Networks</p>
+	</header>
+	
+	<div class="container">
+		
+		<!-- Introduction-->
+		<section class="center">
+			<h1>Hello!</h1>
+			<p>There are many so-called “Data Science wars” about which tool is better for big and fuzzy data analysis: Python or R.
+But most of them agree on a general idea that Python and R are very powerful both and it is mostly a question of choice. You can read more about pros and cons of Python and R 
+<a href="https://www.datacamp.com/community/tutorials/r-or-python-for-data-analysis">here</a>.</p>
+<p> Personally I like to take the best from both of them, and in this post I want to give a quick tutorial on my approach of combining Python and R for the simplified <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL process</a>.
+
+			</p>
+		</section>
+		
+		<hr>
+	
+	<div class="container">
+			
+		<!--Experience Tables-->
+		<section class="experience">
+			<div class="row">
+				<div class="grid-6">
+					<h2>We’ll follow the steps of the ETL process, adapting them for our needs:</h2>
+					<ul>
+					<p><b>Step 1. Extract -> Get the data</b></p>
+					<p>We will get some dummy data from the official Twitter API, for example some trending topics and we’ll collect tweets for that topic, which we will store in Json.
+Basically, there is no particular need to store the data for this exercise, we can extract and compute the needed metrics on the fly, but when you work with data mining, you know that the more you store - the better. To avoid situations when you lack some indicator in your data and you have to make more requests or even redo the crawl.</p>
+					<p><b>Step 2. Transform -> Choose the data</b></p>
+					<p>We will use Python to load json in memory, choose the metrics that’ll allow us to define the popularity of the topic and compute some additional metrics and export it in a format that’ll be convenient for the future analysis and plotting with R.</p>
+					<p><b>Step 3. Load -> Plot the data</b></p>
+					<p>Here we move a bit away from the classical meaning of the “Load” step of ETL process, we are not loading the data in the database, but we load data in R for the visualisation.
+We’ll do my favorite types of plots for the quantitative data analysis: CDF, CCDF and scatterplots with heatmaps.</p>
+				
+
+
+						<p>Gathering depersonalized information from Twitter API</p>
+
+						<li>Applying graph theory to understand the chracteristics of the tweet content, to identify attempts to influence regular users</li>
+						<li>Analysing graph metrics to automate the process of spam and opinion manpulation discovery</li>
+					</ul>
+					</div>
+			</div>
+		</section>
+		
+
+		<hr>
+
+		<section>
+			<div class="row">				
+				<div class="grid-6">
+					<h1>If you want to know me better, you can:</h1>
+					<p>
+					<ul>
+						<li>Download my formal <a href="https://www.dropbox.com/s/k6604e6cqqfzk4q/AnastasiaKuznetsovaCV.pdf?dl=0">CV</a></li>
+						<li>Write me an <a href="mailto:kuznetsova.a.v.mail@gmail.com?Subject=Request_Web_Resume" target="_top">email</a> </li>
+						<li>Wander in my <a href="https://github.com/Asgil">GitHub</a> repository</li>
+						<li>Check out my <a href="https://fr.linkedin.com/in/anastasiavkuznetsova">LinkedIn</a> </li>
+					</ul>
+					</p>
+				</div>
+			</div>
+		</section>
+		
+		
+		
+		<!--Footer-->
+		<footer class="center">
+			<hr>
+			<span>&copy; Anastasia Kuznetsova 2016</span>
+		</footer>
+		
+	</div><!-- End Container -->
+	
+</body>
+</html>
