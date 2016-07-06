@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>Anastasia Kuznetsova</title>
+	<title>Social Network Analysis</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
  
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,700' rel='stylesheet' type='text/css'>
@@ -24,22 +24,20 @@
 	
 	<!-- Header-->
 	<header>
-		<!--<img src="img/top.png" width="500" top="20" wspace="200" alt="">-->
+		<img src="img/elect.jpg" width="max" top="20" vspace="30" alt="">
 
-		<h1>Social Network Analysis</h1>
-		<p>How to combine python and R to analyze data from Social Networks</p>
+		<h1>Social Network Responce to the Presidential Elections in the US</h1>
 	</header>
 	
 	<div class="container">
 		
 		<!-- Introduction-->
 		<section class="center">
-			<h1>Hello!</h1>
-			<p>There are many so-called “Data Science wars” about which tool is better for big and fuzzy data analysis: Python or R.
-But most of them agree on a general idea that Python and R are very powerful both and it is mostly a question of choice. You can read more about pros and cons of Python and R 
-<a href="https://www.datacamp.com/community/tutorials/r-or-python-for-data-analysis">here</a>.</p>
-<p> Personally I like to take the best from both of them, and in this post I want to give a quick tutorial on my approach of combining Python and R for the simplified <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load">ETL process</a>.
-
+			<h1>How to use public tweets to analyze OSN responce for a topic.</h1>
+			<p>All of us are concerned about our future and the future of our world. And as a huge part of our life, Social Networks reflect our opinion about important world events. I would like to show you how you can very simple track and analyse the responce of Twitter users for any topic.</p>
+			<p> I choose <a href="https://twitter.com/">Twitter</a>, because it has an easy to use and publicly available <a href="https://dev.twitter.com/overview/documentation">API</a> and because of it's nature which is to reflect in real-time world breaking events and news. </p>
+			<p>As a topic I chose the current Presidential Elections Race in US, discussed all over the world. There are already a lot of different analytics done on it, for example a very broad analysis of all of the news media <a href="http://www.electiontracker.us/">Election Tracker</a> by <a href="http://www.opentext.com/">OpenText Analytics</a>, but we will focus more on the regular user's social responce for two major candidates: <b>Donald Trump</b> and <b>Hillary Clinton</b>. </p>
+			<p>From the techical point of view, you will need  <a href="https://www.python.org/download/releases/3.0/">Python 3</a> and <a href="https://www.r-project.org/">R</a> installed on your preferred OS.
 			</p>
 		</section>
 		
@@ -51,39 +49,94 @@ But most of them agree on a general idea that Python and R are very powerful bot
 		<section class="experience">
 			<div class="row">
 				<div class="grid-6">
-					<h2>We’ll follow the steps of the ETL process, adapting them for our needs:</h2>
-					<ul>
-					<p><b>Step 1. Extract -> Get the data</b></p>
-					<p>We will get some dummy data from the official Twitter API, for example some trending topics and we’ll collect tweets for that topic, which we will store in Json.
-Basically, there is no particular need to store the data for this exercise, we can extract and compute the needed metrics on the fly, but when you work with data mining, you know that the more you store - the better. To avoid situations when you lack some indicator in your data and you have to make more requests or even redo the crawl.</p>
-					<p><b>Step 2. Transform -> Choose the data</b></p>
-					<p>We will use Python to load json in memory, choose the metrics that’ll allow us to define the popularity of the topic and compute some additional metrics and export it in a format that’ll be convenient for the future analysis and plotting with R.</p>
-					<p><b>Step 3. Load -> Plot the data</b></p>
-					<p>Here we move a bit away from the classical meaning of the “Load” step of ETL process, we are not loading the data in the database, but we load data in R for the visualisation.
-We’ll do my favorite types of plots for the quantitative data analysis: CDF, CCDF and scatterplots with heatmaps.</p>
-				
+					<h2>To get the social responce for a chosen topic we will follow several steps:</h2>
 
-
-						<p>Gathering depersonalized information from Twitter API</p>
-
-						<li>Applying graph theory to understand the chracteristics of the tweet content, to identify attempts to influence regular users</li>
-						<li>Analysing graph metrics to automate the process of spam and opinion manpulation discovery</li>
-					</ul>
-					</div>
-
+					<img src="img/workflow.png" width="1200" top="20" vspace="10" alt="">
 
 
 			</div>
 
+			<hr>
 			<div class="row">
 				<div class="grid-6">
-				<h2>Step 1: Get the data.</h2>
+				<p><h2>Step 1: Get the data.</h2></p>
+				<p>First of all we need to connect to the Twitter API. Either directly, or via one of the available opensource wrappers. Personally I prefer <a href="https://github.com/tweepy/tweepy">Tweepy</a> and will use it as an example. 
+				<a href="https://github.com/Asgil/Social_Network_Analysis/blob/master/twitter%20crawl/tweepy_streaming.py">Here</a> you can find a sample of the very simple streaming crawler, which allows you to tract any keywords you would like. You have to modify the file by adding your credentials, which you got when you authorised an application (<a href="http://tweepy.readthedocs.io/en/v3.5.0/auth_tutorial.html">authentication tutorial</a> can help you).</p>
+				<img src="img/tw_tokens.png" width="200" vspace="10" hspace="270"  >
+				<p>
+					Then you choose the topic you would like to track and run the script with python3 by typing in your preferred terminal <b>$ python3 tweepy_streaming.py #YourHashtag</b>.
+				</p>
+				<p>For our analysis I chose two candidates for the President of the US <i>Hillary Clinton</i> and <i>Donald Trump</i>. I have collected tweets which contain the respective hashtags for 24 hours.
+				</p>
+
+
+
+			</div>
+			<div class="row">
+				<div class="grid-6">
+				<p><h2>Step 2: Extract the data.</h2></p>
+				<p>Each tweet collected via the <a href="https://dev.twitter.com/streaming/overview">Twitter API</a> returns a <a href="https://dev.twitter.com/streaming/overview/processing">json</a> of a <a href="https://dev.twitter.com/overview/api/tweets">tweet object</a>. There are many fields possible to analyze, but we will focus just on some of them, which I personally think would allow us to represent the public opinion and the validity of this opinion about one of our topics.
+				</p>
+				<p><b>Reading the File.</b></p>
+				<p>First we have to load the json file into memory. Usually, if the dataset is too big it's better to read file line by line and avoid storing all the data in memory, because it may not be sufficient. But here, we have relatively small dataset and we are going to compute some metrics with relation to each other, so it makes sence to store all the tweet objects in memory.
+				</p>
+				<img src="img/read_file.png" width="500" vspace="10" hspace="100"  >
+				<p>This function already returns to basic statistics as the number of tweets for the topic. Now we would like to extract the data from each tweet. </p>
+				<p><b>Extracting the Location. </b></p>
+				<p>As an example, we will start with the 
+				<a href="https://dev.twitter.com/overview/api/places">place</a> object. If there is a geolocation of the tweet, we can know from which country/city or any other place the tweet comes from. Let's see which locations are the most popular for Hillary Clinton and Donald Trump.</p>
+				<img src="img/location.png" width="850" vspace="10"   >
+				<p>By saving the dictionary of location frequency to the file, we can later process it and create a <a href="http://worditout.com/word-cloud/make-a-new-one">word cloud</a> to see which locations are the most popular.</p>
+				<p><b>Extracting the User Object. </b></p>
+				<p>Now let's take a look at the users, who post those tweets. We already know that the majority of them come from the US (which is not surprising), but what else could we know about them?</p>
+				<p>The answer is given in the <a href="https://dev.twitter.com/overview/api/users">user</a> object. Let us compute the number of users which are verified by Twitter, to see the fraction of trusworthy users talking about the Presidential Nominees.</p>
+				<img src="img/users_verif.png" width="320" hspace="210" vspace="10">
+				<p> We can also compute the total audience of the tweets sent by all users in the dataset, so that we could get an approximate understanding of how many people could've been affected by the posts.</p>
+				<img src="img/audience.png" width="600" hspace="70" vspace="10">
+				<p>The next thing is to look at the popularity of the user. How many people follow him and how many other accounts does he follow. For that I choose to compute the <i>friendship coefficient</i> as a ratio between the number of followers of a user and number of the accounts it follows. The <b>high</b> ratio means that the user is highly popular and the audience that sees the tweets from him could be big. The <b>small</b> ratio on the other hand would indicate a regular user, which is posting for his friends mostly.</p>
+				<img src="img/users_friends.png" width="650" hspace="40" vspace="10">
+				<p><b>Extracting the Social Counts. </b></p>
+				<p>Let us now check how much people agree on the posted tweets by calculating the total number of likes and the distribution. We will save the distribution dictionary to the file to further compute the <a href="https://en.wikipedia.org/wiki/Empirical_distribution_function">ECDF</a>. </p>
+				<img src="img/likes.png" width="850" vspace="10">
+				<p><b>Extracting the Entities.</b></p>
+				<p>Now let's take a closer look at the <a href="https://dev.twitter.com/overview/api/tweets">tweet</a> object. Along with the regular metrics and user information which we processes earlier, tweet object contains an interesting attribute: <a href="https://dev.twitter.com/overview/api/entities">entities</a>. Entities are hashtags, mentions, media and urls. This is the most important part of the tweet which can give you a very useful insight about the topic of the tweet, it's connections to other topics, twitter users involved in the conversation and etc., in case you don't want to use any text processing tools. In this post, I will focus on hashtags and mentions, because they are the easiest to process and they already can give us a lot of insight.
+				</p>
+				<p><b>Hashtags. </b></p>
+				<p>For the hashtags, we will create the adjacency list of hashtags appearing in one tweet and calculate the overall frequency of a hashtag in the dataset.</p>
+				<img src="img/hash_freq.png" width="650" hspace="40" vspace="10">
+				<p>It is also interesting to see, how hashtags are connected with each other and which pairs of hashtags are the most popular. For that we will count the frequency of all possible tuples of hashtags.</p>
+				<img src="img/hash_adj.png" width="700" hspace="20" vspace="10">
+				<p><b>Mentions. </b></p>
+				<p>For the user mentions in tweets, the process will be the same as for the hashtags, we calculate the frequency of the mention and the adjacency lists of users mentioned together.</p>
+
+				<p><h2>Step 3: Make conclusions.</h2></p>
+				<p><b>General statistics.</b></p>
+				<img src="img/stat.png" width="550" hspace="100" vspace="10">
+				<p>In our 24h dataset we see approximately the same number of tweets for both candidates, but if we start to look further, we notice that for example, tweets about Hillary Clinton have less verified usesrs, which says that more public figures discuss Donald Trump. In addition, we can notice a significant difference in audience amout and responce for the tweets. Tweets about Donald Trump have twice as big audience and twice as many likes as tweets about Hillary Clinton.</p>
+				<p><b>Location.</b></p>
+				<p>Previously calculated location frequency we can visualize by making a word cloud of locations according the number of times it appears in the dataset.</p>
+				<img src="img/location_w.png" width="700" hspace="20" vspace="10">
+				<p> We clearly see that users from US prevail in both datasets, but also we can notice that countries of users discussing Donald Trump are more diverse.</p>
+				<p><b>User friendship coefficient.</b></p>
+				<img src="img/audience_cdf.png" width="800"  vspace="10">
+				<p><b>Social Counts.</b></p>
+				<img src="img/likes_cdf.png" width="800" vspace="10">
+				<p><b>Popularity of hashtags.</b></p>
+				<img src="img/hash.png" width="700" hspace="20" vspace="10">
+				<img src="img/hashadj.png" width="900"  vspace="10">
+				<p><b>Popularity of mentions.</b></p>
+				<img src="img/menhadj.png" width="900"  vspace="10">
+				Word cloud and CDF?
 
 
 			</div>
 		</section>
-		
-
+		<hr>
+		<section class="center">
+		<p>
+		In this post I tried to show my approach to the OSN analysis for some topic. Of course, there are many other approaches, including <a href="https://www.feicho.com/watson-alchemy-twitter-analysis-us-presidential-election/">sentiment analysis</a> or <a href="http://news.mit.edu/2012/predicting-twitter-trending-topics-1101">prediction of trending topics</a> but I like the simplicity of the tweet content analysis and low entry levels to start Social Network analysis without strong programming or analytical skills.
+		</p>
+</section>
 		<hr>
 
 		<section>
