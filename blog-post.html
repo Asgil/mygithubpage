@@ -24,9 +24,10 @@
 	
 	<!-- Header-->
 	<header>
-		<img src="img/elect.jpg" width="max" top="20" vspace="30" alt="">
+		<img src="img/vote.png" width="max" top="10" vspace="20" alt="">
 
-		<h1>Social Network Responce to the Presidential Elections in the US</h1>
+		<h1>Social Network Responce to the</h1>
+		<h1>Presidential Elections in the US</h1>
 	</header>
 	
 	<div class="container">
@@ -77,6 +78,7 @@
 				<p><h2>Step 2: Extract the data.</h2></p>
 				<p>Each tweet collected via the <a href="https://dev.twitter.com/streaming/overview">Twitter API</a> returns a <a href="https://dev.twitter.com/streaming/overview/processing">json</a> of a <a href="https://dev.twitter.com/overview/api/tweets">tweet object</a>. There are many fields possible to analyze, but we will focus just on some of them, which I personally think would allow us to represent the public opinion and the validity of this opinion about one of our topics.
 				</p>
+				<p> <a href="https://github.com/Asgil/Social_Network_Analysis/blob/master/data%20extraction/metrics_extraction.py">Here</a> you can find a script that does all the below described steps. You can run it with python3 by typing in your terminal <b>$ python3 metrics_extraction.py topic_name path_to_the_json_file</b>.</p>
 				<p><b>Reading the File.</b></p>
 				<p>First we have to load the json file into memory. Usually, if the dataset is too big it's better to read file line by line and avoid storing all the data in memory, because it may not be sufficient. But here, we have relatively small dataset and we are going to compute some metrics with relation to each other, so it makes sence to store all the tweet objects in memory.
 				</p>
@@ -99,7 +101,7 @@
 				<p>Let us now check how much people agree on the posted tweets by calculating the total number of likes and the distribution. We will save the distribution dictionary to the file to further compute the <a href="https://en.wikipedia.org/wiki/Empirical_distribution_function">ECDF</a>. </p>
 				<img src="img/likes.png" width="850" vspace="10">
 				<p><b>Extracting the Entities.</b></p>
-				<p>Now let's take a closer look at the <a href="https://dev.twitter.com/overview/api/tweets">tweet</a> object. Along with the regular metrics and user information which we processes earlier, tweet object contains an interesting attribute: <a href="https://dev.twitter.com/overview/api/entities">entities</a>. Entities are hashtags, mentions, media and urls. This is the most important part of the tweet which can give you a very useful insight about the topic of the tweet, it's connections to other topics, twitter users involved in the conversation and etc., in case you don't want to use any text processing tools. In this post, I will focus on hashtags and mentions, because they are the easiest to process and they already can give us a lot of insight.
+				<p>Now let's take a closer look at the <a href="https://dev.twitter.com/overview/api/tweets">tweet</a> object. Along with the regular metrics and user information which we processes earlier, tweet object contains an interesting attribute: <a href="https://dev.twitter.com/overview/api/entities">entities</a>. Entities are <i>hashtags, mentions, media</i> and <i>urls</i>. This is the most important part of the tweet which can give you a very useful insight about the topic of the tweet, it's connections to other topics, twitter users involved in the conversation and etc., in case you don't want to use any text processing tools. In this post, I will focus on hashtags and mentions, because they are the easiest to process and they already can give us a lot of insight.
 				</p>
 				<p><b>Hashtags. </b></p>
 				<p>For the hashtags, we will create the adjacency list of hashtags appearing in one tweet and calculate the overall frequency of a hashtag in the dataset.</p>
@@ -117,17 +119,26 @@
 				<p>Previously calculated location frequency we can visualize by making a word cloud of locations according the number of times it appears in the dataset.</p>
 				<img src="img/location_w.png" width="700" hspace="20" vspace="10">
 				<p> We clearly see that users from US prevail in both datasets, but also we can notice that countries of users discussing Donald Trump are more diverse.</p>
-				<p><b>User friendship coefficient.</b></p>
+				<p><b>Audience estimation.</b></p>
+				<p>We already saw that the possible audience to see posts about Donald Trump is two times bigger than the audiency for Hillary Clinton, but can we get more information?</p>
+				<p>To see if there's something else different between the audiences, we can plot the  <a href="https://en.wikipedia.org/wiki/Empirical_distribution_function">ECDF</a> function. On the plor we cn see that the general distribution of the number of followers per each user found in two datasets is very similar. Since we know that all OSN's are <a href="https://www.mpi-sws.org/~mmarcon/SocialNetworks-IMC.pdf">proven</a> to preserve the <a href="https://en.wikipedia.org/wiki/Power_law">power law</a> to extract more information, we need to look at the outliers.</p>
 				<img src="img/audience_cdf.png" width="800"  vspace="10">
+				<p>For that I prefer to use <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function#Complementary_cumulative_distribution_function_.28tail_distribution.29">CCDF</a>. On the CCDF plot we can clearly see the difference between two distributions, which supports the claim that users posting about Donald Trump has a larger audience not only because there are more users in the dataset, but also because there are several accounts with much more significant number of followers than in the dataset for Hillary Clinton. This also follows the analysis of the <a href="http://www.electiontracker.us/compare.html?lid=13&rid=3&pid=0">Election Tracker</a> where it's clearly seen that media tend to discuss Donald Trump more than Hillary Clinton. Now we can see that the situation on Twitter is similar.
+				<img src="img/audience_ccdf.png" width="800"  vspace="10">
 				<p><b>Social Counts.</b></p>
+				<p>Now let's look if the number of likes for the post in the dataset is also biased by the long tail effect, as the audience size.</p>
 				<img src="img/likes_cdf.png" width="800" vspace="10">
+				<p>On this CDF you see that the distribution of likes per tweet for Hillary Clinton tweets preserves the power law, but for the Donald Trump we clearly see that there are three tweets with a significantly bigger number of likes than the others. The most liked one comes from the verified user <a href="https://twitter.com/salmahayek?lang=en">@salmahayek</a> who expresses her opinion about the recent news.</p>
+				<img src="img/sh_tweet.png" width="600" hspace="50" vspace="10">
 				<p><b>Popularity of hashtags.</b></p>
-				<img src="img/hash.png" width="700" hspace="20" vspace="10">
-				<img src="img/hashadj.png" width="900"  vspace="10">
+				<p>If we want to see which topics prevail in the discussion about both candidates, we can take a look at the word cloud of single hashtag popularity and the popularity of the tuples of hashtags.</p>
+				<img src="img/hash.png" width="650" hspace="30" vspace="10">
+				<img src="img/hashadj.png" width="1000"  vspace="10">
+				<p>Donald Trump is connected with recent discussions about Brexit and he was compared to <a href="https://en.wikipedia.org/wiki/Boris_Johnson">Boris Johnson</a>, and Hillary Clinton is mostly compared to Donald Trump and a lot of different hashtags with different sentiment: <a href="https://twitter.com/search?q=%23ImWithHer&src=tyah">#ImWithHer</a> or <a href="https://twitter.com/search?q=%23NeverHillary&src=tyah">#NeverHillary</a> as an example. </p>
 				<p><b>Popularity of mentions.</b></p>
-				<img src="img/menhadj.png" width="900"  vspace="10">
-				Word cloud and CDF?
-
+				<p>As the last part of our analysis we can also look at the popularity of accounts mentioned in tweets. For both of the candidates. most frequently mentioned accounts are <a href="https://twitter.com/ConnorGillies">journalist</a> and news media: <a href="https://twitter.com/LBC">LBC</a> and <a href="https://twitter.com/FoxNews">Fox News</a>. This can mean that Twitter is no more a place of a regular users conversations, but a news aggregator. </p>
+				<img src="img/menhadj.png" width="1000"  vspace="10">
+				<p>This analysis may lead to different conclusions, especially if we dig deeper and conduct textual analysis, or analysis of embedded URLs. But even now I think this information is enough to get some understanding about people's responce to the US Election on Twitter.</p>
 
 			</div>
 		</section>
